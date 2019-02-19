@@ -2,11 +2,11 @@
 	"name": "Streamer",
 	"version": "0.5.0",
 	"author": [
-		"Wiki Platform Team",
-		"Curse Inc.",
-		"Alexia E. Smith"
+		"Alexia E. Smith",
+		"Hydra Wiki Platform Team"
 	],
 	"url": "http://www.mediawiki.org/wiki/Extension:Streamer",
+	"license-name": "LGPL-3.0-only",
 	"descriptionmsg": "streamer_description",
 	"type": "parserhook",
 	"requires": {

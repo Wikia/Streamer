@@ -1,4 +1,7 @@
+*.kate-swp
+*~
+.*.swp
 .DS_Store
-.idea
-*.sublime-workspace
-*.sublime-project
+.svn
+/vendor
+composer.lock
