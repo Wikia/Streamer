@@ -7,7 +7,7 @@ The **Streamer** extension displays information about streamers from various str
 * **Licensing:** Streamer is released under [The GNU Lesser General Public License, version 3.0](http://opensource.org/licenses/lgpl-3.0.html).
 
 
-#Installation
+# Installation
 
 Download and place the file(s) in a directory called Streamer in your extensions/ folder.
 
@@ -17,7 +17,7 @@ Add the following code at the bottom of your LocalSettings.php:
 
 Done! Navigate to "Special:Version" on your wiki to verify that the extension is successfully installed.
 
-##Configuration
+## Configuration
 Streamer only requires configuration if the YouTube service will be used.
 
 |          Setting         | Default | Description                                                                                                                                              |
@@ -26,11 +26,11 @@ Streamer only requires configuration if the YouTube service will be used.
 | $wgTwitchClientId        | null    | Accessing the Twitch API requires [registering with Twitch and obtaining a Client ID](https://www.twitch.tv/kraken/oauth2/clients/new).                  |
 
 
-#Usage
+# Usage
 
-##Tags
+## Tags
 
-###\#streamer - Parser Tag
+### \#streamer - Parser Tag
 The #streamer parser tag takes what service is being used, who the user is, and optionally how to display the information.
 
 Basic Syntax:
@@ -40,7 +40,7 @@ Basic Syntax:
 	|user=[User]
 	}}
 
-####Parameters for #streamer Tag
+#### Parameters for #streamer Tag
 
 |       Parameter       | Required | Default | Description                                                                                                                            |
 |----------------------:|----------|---------|----------------------------------------------------------------------------------------------------------------------------------------|
@@ -49,7 +49,7 @@ Basic Syntax:
 | template              | no       | block   | **Built In**: block, debug, link, live, minilive, thumbnail, viewers <br/>Use a built in template or specify a custom template to use. |
 | link                  | no       |         | Fully qualifed URL to override the link in templates.                                                                                  |
 
-####Example
+#### Example
 
 To display the default block template for TwitchPlaysPokemon from the Twitch streaming service:
 
@@ -61,10 +61,10 @@ To display the default block template for TwitchPlaysPokemon from the Twitch str
 ![](documentation/TwitchPlaysPokemonExample.png)
 
 
-####Templates
+#### Templates
 There are seven built in templates that come with the extension; block, debug, link, live, minilive, thumbnail, and viewers.  By default if no template is specified it uses the block template.
 
-#####Custom
+##### Custom
 Which template is used to display streamer information can be customized through Mediawiki's templating system.  Using the "template" parameter simply add the template page name into the parser call.  **Example: template=Template:BlockCustom**
 
 There are several replacement variables used in the templates that will be automatically filled in with the correct information.
@@ -81,10 +81,10 @@ There are several replacement variables used in the templates that will be autom
 * **%CHANNEL_URL%** - Direct unmodified URL to the channel on the service.
 * **%LINK%** - URL to the streamer's page on the service.  If a custom page link is specified in the Special:StreamerInfo interface it will be used instead.
 
-#####Built In
+##### Built In
 The built in templates below are copied from the StreamerTemplate class file and are placed here for reference purposes.  They can be used to assist in building custom templates.
 
-######block
+###### block
 	<div class='stream block'>
 		<div class='logo'><img src='{{#if:%THUMBNAIL%|%THUMBNAIL%|%LOGO%}}'/></div>
 		<div class='stream_info'>
@@ -93,7 +93,7 @@ The built in templates below are copied from the StreamerTemplate class file and
 		</div>
 	</div>
 
-######debug
+###### debug
 	<div class='stream debug'>
 		<ul>
 			<li>ONLINE => %ONLINE%</li>
@@ -110,10 +110,10 @@ The built in templates below are copied from the StreamerTemplate class file and
 		</ul>
 	</div>
 
-######link
+###### link
 	<div class='name'><a href='%LINK%'>%NAME%</a></div>
 
-######live
+###### live
 	<div class='stream live'>
 		<div class='stream_info'>
 			<div class='name'><a href='%LINK%'>%NAME%</a></div>
@@ -121,7 +121,7 @@ The built in templates below are copied from the StreamerTemplate class file and
 		</div>
 	</div>
 
-######minilive
+###### minilive
 	<div class='stream minilive'>
 		<div class='stream_info'>
 			<div class='name'><a href='%LINK%'>%NAME%</a></div>
@@ -129,7 +129,7 @@ The built in templates below are copied from the StreamerTemplate class file and
 		</div>
 	</div>
 
-######viewers
+###### viewers
 	<div class='stream viewers'>
 		<div class='stream_info'>
 			<div class='name'><a href='%LINK%'>%NAME%</a></div>
@@ -137,12 +137,12 @@ The built in templates below are copied from the StreamerTemplate class file and
 		</div>
 	</div>
 
-######thumbnail
+###### thumbnail
 	<div class='stream thumbnail'>
 		<div class='logo'><img src='{{#if:%THUMBNAIL%|%THUMBNAIL%|%LOGO%}}'/></div>
 	</div>
 
-###\#streamerinfo - Parser Meta Tag
+### \#streamerinfo - Parser Meta Tag
 The #streamerinfo parser meta tag takes what service is being used and who the user is to tag an article as related to that person.  It will cause any links automatically generated from the #streamer tag to use the article page as the destination and display name.  Streamer information created from tagging or manually entered will be visible in the Special:StreamerInfo interface.  Note: Articles tagged with the #streamerinfo tag will override any manually entered information.
 
 Basic Syntax:
@@ -152,14 +152,14 @@ Basic Syntax:
 	|user=[User]
 	}}
 
-####Parameters for #streamerinfo Tag
+#### Parameters for #streamerinfo Tag
 
 |       Parameter       | Required | Default | Description                                                                                                                     |
 |----------------------:|----------|---------|---------------------------------------------------------------------------------------------------------------------------------|
 | service               | yes      |         | The service name to look up users on.  See **Supported Streaming Services**.                                                    |
 | user                  | yes      |         | The user identifier for user on the streaming service.                                                                          |
 
-####Example
+#### Example
 
 To tag the article "Twitch Plays Pokemon" with the Twitch user "twitchplayspokemon":
 
@@ -170,7 +170,7 @@ To tag the article "Twitch Plays Pokemon" with the Twitch user "twitchplayspokem
 
 This would cause all output from the #streamer tag to reference to the "Twitch Plays Pokemon" when generating links and display names.
 
-##Supported Streaming Services
+## Supported Streaming Services
 
 |  Service  | Parameter Value | Web Site                 |
 |----------:|-----------------|--------------------------|
