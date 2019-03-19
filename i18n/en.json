@@ -35,5 +35,6 @@
 	"sif_save": "Save",
 	"sid_streamer_delete_confirm": "Are you sure you wish to delete this streamer information?",
 	"sid_confirm": "Confirm",
-	"no_streamers_found": "No streamer information was found."
+	"no_streamers_found": "No streamer information was found.",
+	"right-edit_streamer_info": "Add/edit streamer info on [[Special:StreamerInfo]]"
 }
