@@ -35,7 +35,7 @@
 		"StreamerHooks": "Streamer.hooks.php",
 		"ApiStreamerBase": "classes/api/ApiStreamerBase.php",
 		"ApiAzubu": "classes/api/ApiAzubu.php",
-		"ApiBeam": "classes/api/ApiBeam.php",
+		"ApiMixer": "classes/api/ApiMixer.php",
 		"ApiHitbox": "classes/api/ApiHitbox.php",
 		"ApiTwitch": "classes/api/ApiTwitch.php",
 		"ApiYoutube": "classes/api/ApiYoutube.php",

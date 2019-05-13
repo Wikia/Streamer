@@ -261,9 +261,9 @@ This would cause all output from the #streamer tag to reference to the "Twitch P
 | azubu
 | [http://www.azubu.tv/ http://www.azubu.tv/]
 |-
-| Beam
-| beam
-| [https://beam.pro/ https://beam.pro/]
+| Mixer
+| mixer
+| [https://mixer.pro/ https://mixer.com/]
 |-
 | Twitch.tv
 | twitch

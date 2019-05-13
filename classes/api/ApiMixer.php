@@ -1,7 +1,7 @@
 <?php
 /**
  * Streamer
- * Beam API
+ * Mixer API
  *
  * @license		LGPLv3
  * @package		Streamer
@@ -9,13 +9,13 @@
  *
  **/
 
-class ApiBeam extends ApiStreamerBase {
+class ApiMixer extends ApiStreamerBase {
 	/**
 	 * API Entry Point
 	 *
 	 * @var		string
 	 */
-	protected $apiEntryPoint = "https://beam.pro/api/v1/";
+	protected $apiEntryPoint = "https://mixer.com/api/v1/";
 
 	/**
 	 * Main Constructor
@@ -24,7 +24,7 @@ class ApiBeam extends ApiStreamerBase {
 	 * @return	void
 	 */
 	public function __construct() {
-		$this->service = 'beam';
+		$this->service = 'mixer';
 		parent::__construct();
 	}
 
@@ -77,8 +77,8 @@ class ApiBeam extends ApiStreamerBase {
 		$channelId = false;
 		if (isset($json['username'])) {
 			$this->setName($json['username']);
-			$this->setLogo("https://s3.amazonaws.com/uploads.beam.pro/avatar/{$userId}.jpg");
-			$this->setChannelUrl("https://beam.pro/".$json['username']);
+			$this->setLogo("https://s3.amazonaws.com/uploads.mixer.pro/avatar/{$userId}.jpg");
+			$this->setChannelUrl("https://mixer.pro/".$json['username']);
 			$this->setLifetimeViews($json['channel']['viewersTotal']);
 			$this->setFollowers($json['channel']['numFollowers']);
 			$this->setViewers($json['channel']['viewersCurrent']);
@@ -100,7 +100,7 @@ class ApiBeam extends ApiStreamerBase {
 
 		$this->setDoing($json['type']['name']);
 
-		$this->setThumbnail($this->getLogo()); //@TODO: If Beam.pro ever supports an actual video thumbnail it should changed here.
+		$this->setThumbnail($this->getLogo()); //@TODO: If Mixer.pro ever supports an actual video thumbnail it should changed here.
 
 		$this->updateCache();
 
@@ -108,7 +108,7 @@ class ApiBeam extends ApiStreamerBase {
 	}
 
 	/**
-	 * Make an API request to Beam.  Beam returns error codes inside their JSON and can be handled gracefully.
+	 * Make an API request to Mixer.  Mixer returns error codes inside their JSON and can be handled gracefully.
 	 *
 	 * @access	protected
 	 * @param	array	URL bits to put between directory separators.

@@ -8,7 +8,7 @@
 
 ###0.4.0
 * Support for Azubu.tv.
-* Support for Beam.
+* Support for Mixer.
 * Support for YouTube.
 * Standards clean up on special pages.
 * Few miscellaneous bug fixes.

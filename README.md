@@ -175,6 +175,6 @@ This would cause all output from the #streamer tag to reference to the "Twitch P
 |  Service  | Parameter Value | Web Site                 |
 |----------:|-----------------|--------------------------|
 | Azubu.tv  | azubu           | http://www.azubu.tv/     |
-| Beam      | beam            | http://beam.pro/         |
+| Mixer     | mixer           | http://mixer.com/        |
 | Twitch.tv | twitch          | http://www.twitch.tv/    |
 | YouTube   | youtube         | https://www.youtube.com/ |
