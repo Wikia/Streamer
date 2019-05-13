@@ -77,8 +77,8 @@ class ApiMixer extends ApiStreamerBase {
 		$channelId = false;
 		if (isset($json['username'])) {
 			$this->setName($json['username']);
-			$this->setLogo("https://s3.amazonaws.com/uploads.mixer.pro/avatar/{$userId}.jpg");
-			$this->setChannelUrl("https://mixer.pro/".$json['username']);
+			$this->setLogo($json['avatarUrl']);
+			$this->setChannelUrl("https://mixer.com/".$json['username']);
 			$this->setLifetimeViews($json['channel']['viewersTotal']);
 			$this->setFollowers($json['channel']['numFollowers']);
 			$this->setViewers($json['channel']['viewersCurrent']);
@@ -100,7 +100,7 @@ class ApiMixer extends ApiStreamerBase {
 
 		$this->setDoing($json['type']['name']);
 
-		$this->setThumbnail($this->getLogo()); //@TODO: If Mixer.pro ever supports an actual video thumbnail it should changed here.
+		$this->setThumbnail($this->getLogo()); //@TODO: If mixer.com ever supports an actual video thumbnail it should changed here.
 
 		$this->updateCache();
 

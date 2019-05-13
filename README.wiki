@@ -263,7 +263,7 @@ This would cause all output from the #streamer tag to reference to the "Twitch P
 |-
 | Mixer
 | mixer
-| [https://mixer.pro/ https://mixer.com/]
+| [https://mixer.com/ https://mixer.com/]
 |-
 | Twitch.tv
 | twitch
