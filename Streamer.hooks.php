@@ -65,7 +65,9 @@ class StreamerHooks {
      * @return	boolean	true
      */
     static public function onParserFirstCallInit(Parser &$parser) {
-		define('STREAMER_VERSION', '0.6.0');
+		if (!defined('STREAMER_VERSION')) {
+			define('STREAMER_VERSION', '0.6.0');
+		}
 
 		$parser->setFunctionHook("streamer", "StreamerHooks::parseStreamerTag", SFH_OBJECT_ARGS);
 		$parser->setFunctionHook("streamerinfo", "StreamerHooks::parseStreamerInfoTag", SFH_OBJECT_ARGS);
