@@ -151,7 +151,7 @@ class StreamerInfo {
 				['streamer'],
 				['*'],
 				[
-					'service'		=> $this->data['service'],
+					'service'		=> isset($this->data['service']) ? $this->data['service'] : null,
 					'remote_name'	=> $this->data['remote_name']
 				],
 				__METHOD__
@@ -352,7 +352,7 @@ class StreamerInfo {
 	 */
 	public function getDisplayName() {
 		$this->load();
-		return $this->data['display_name'];
+		return isset($this->data['display_name']) ? $this->data['display_name'] : '';
 	}
 
 	/**
@@ -374,12 +374,12 @@ class StreamerInfo {
 	/**
 	 * Return the page title for this streamer.
 	 *
-	 * @access	public
-	 * @return	object	Title
+	 * @access public
+	 * @return Title|null
 	 */
 	public function getPageTitle() {
 		$this->load();
-		return $this->data['page_title'];
+		return isset($this->data['page_title']) ? $this->data['page_title'] : null;
 	}
 
 	/**
