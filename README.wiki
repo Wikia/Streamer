@@ -96,7 +96,7 @@ To display the default block template for TwitchPlaysPokemon from the Twitch str
 
 <pre><nowiki>
 {{#streamer:
-service=Twitch
+service=twitch
 |user=twitchplayspokemon
 }}
 </nowiki></pre>
