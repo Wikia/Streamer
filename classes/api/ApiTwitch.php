@@ -46,7 +46,15 @@ class ApiTwitch extends ApiStreamerBase {
 			return true;
 		}
 
-		$channel = $this->makeApiRequest(['channels', $this->user]);
+		// Get channel ID from username
+		$userData = $this->makeApiRequest(['users?login='.$this->user]);
+		if ($userData === false || !isset($userData['_total']) || $userData['_total'] != 1) {
+			return false;
+		}
+		$userID = $userData['users'][0]['_id'];
+
+		// Get channel data
+		$channel = $this->makeApiRequest(['channels', $userID]);
 		if ($channel === false) {
 			return false;
 		}
@@ -61,7 +69,7 @@ class ApiTwitch extends ApiStreamerBase {
 			$this->setFollowers($channel['followers']);
 		}
 
-		$stream = $this->makeApiRequest(['streams', $this->user]);
+		$stream = $this->makeApiRequest(['streams', $userID]);
 
 		//Twitch sort of pretends this end point does not exist when the user is not streaming.  So instead of returning false on a fake API error it is better to check and set the stream to be listed as offline.
 		if (is_array($stream) && array_key_exists('stream', $stream) && $stream['stream'] !== null) {
@@ -78,15 +86,26 @@ class ApiTwitch extends ApiStreamerBase {
 	}
 
 	/**
-	 * Return an assembled URL to use for API requests.  Twitch API end points require an extra / at the end of the URL.
+	 * Make an API request to the service.
 	 *
 	 * @access	protected
 	 * @param	array	URL bits to put between directory separators.
-	 * @return	string	Full URL
+	 * @return	mixed	Parsed JSON or false on error.
 	 */
-	protected function getFullRequestUrl($bits) {
+	protected function makeApiRequest($bits) {
 		global $wgTwitchClientId;
 
-		return parent::getFullRequestUrl($bits)."/?client_id={$wgTwitchClientId}";
+		$req = MWHttpRequest::factory( $this->getFullRequestUrl($bits), [ 'timeout' => $this->getRequestOptions()['timeout'] ] );
+		$req->setHeader("Client-ID", $wgTwitchClientId);
+		$req->setHeader("Accept", "application/vnd.twitchtv.v5+json");
+		$req->execute();
+
+		$rawJson = $req->getContent();
+		$json = $this->parseRawJson($rawJson);
+
+		if ($json === false) {
+			return false;
+		}
+		return $json;
 	}
 }
