@@ -1,0 +1,19 @@
+{
+	"name": "hydrawiki/streamer",
+	"version": "0.5.1",
+	"type": "mediawiki-extension",
+	"description": "Display information about a streamer from various streaming services.",
+	"license": "LGPL-3.0-only",
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"require-dev": {
+		"hydrawiki/hydrawiki-codesniffer": "1.0.13"
+	},
+	"scripts": {
+		"test": [
+			"phpcs -p -s"
+		],
+		"fix": "phpcbf"
+	}
+}

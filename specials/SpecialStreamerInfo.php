@@ -3,25 +3,24 @@
  * Streamer
  * Streamer Info Special Page
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Output HTML
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	private $content;
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		parent::__construct('StreamerInfo', 'edit_streamer_info');
@@ -36,8 +35,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Main Executor
 	 *
-	 * @access	public
-	 * @return	void	[Outputs to screen]
+	 * @access public
+	 * @return void	[Outputs to screen]
 	 */
 	public function execute($subpage) {
 		$this->checkPermissions();
@@ -66,8 +65,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Display database listing of streamer information.
 	 *
-	 * @access	private
-	 * @return	void	[Outputs to screen]
+	 * @access private
+	 * @return void	[Outputs to screen]
 	 */
 	private function streamerInfoPage() {
 		$result = $this->DB->select(
@@ -90,8 +89,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Streamer Information Form
 	 *
-	 * @access	public
-	 * @return	void	[Outputs to screen]
+	 * @access public
+	 * @return void	[Outputs to screen]
 	 */
 	public function streamerInfoForm() {
 		$streamerId = $this->wgRequest->getInt('streamer_id');
@@ -130,8 +129,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Save streamer information forms.
 	 *
-	 * @access	private
-	 * @return	array	'success' => Boolean $success, 'errors' => Array of error messages
+	 * @access private
+	 * @return array	'success' => Boolean $success, 'errors' => Array of error messages
 	 */
 	private function streamerInfoSave() {
 		$success = false;
@@ -163,8 +162,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Streamer Information Delete
 	 *
-	 * @access	public
-	 * @return	void	[Outputs to screen]
+	 * @access public
+	 * @return void	[Outputs to screen]
 	 */
 	public function streamerInfoDelete() {
 		$streamerId = $this->wgRequest->getInt('streamer_id');
@@ -198,8 +197,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	/**
 	 * Hides special page from SpecialPages special page.
 	 *
-	 * @access	public
-	 * @return	boolean
+	 * @access public
+	 * @return boolean
 	 */
 	public function isListed() {
 		return $this->userCanExecute($this->wgUser);

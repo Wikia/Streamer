@@ -3,25 +3,24 @@
  * Streamer
  * Twitch API
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class ApiTwitch extends ApiStreamerBase {
 	/**
 	 * API Entry Point
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $apiEntryPoint = "https://api.twitch.tv/kraken/";
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		$this->service = 'twitch';
@@ -32,9 +31,9 @@ class ApiTwitch extends ApiStreamerBase {
 	 * Set the user identifier.
 	 * This function should do any validation and return a boolean.
 	 *
-	 * @access	public
-	 * @return	string	User Identifier
-	 * @return	boolean	Success
+	 * @access public
+	 * @return string	User Identifier
+	 * @return boolean	Success
 	 */
 	public function setUser($user) {
 		if (preg_match("#^[\w]+$#i", $user) !== 1) {
@@ -47,7 +46,7 @@ class ApiTwitch extends ApiStreamerBase {
 		}
 
 		// Get channel ID from username
-		$userData = $this->makeApiRequest(['users?login='.$this->user]);
+		$userData = $this->makeApiRequest(['users?login=' . $this->user]);
 		if ($userData === false || !isset($userData['_total']) || $userData['_total'] != 1) {
 			return false;
 		}
@@ -71,7 +70,7 @@ class ApiTwitch extends ApiStreamerBase {
 
 		$stream = $this->makeApiRequest(['streams', $userID]);
 
-		//Twitch sort of pretends this end point does not exist when the user is not streaming.  So instead of returning false on a fake API error it is better to check and set the stream to be listed as offline.
+		// Twitch sort of pretends this end point does not exist when the user is not streaming.  So instead of returning false on a fake API error it is better to check and set the stream to be listed as offline.
 		if (is_array($stream) && array_key_exists('stream', $stream) && $stream['stream'] !== null) {
 			$this->setViewers($stream['stream']['viewers']);
 			$this->setThumbnail($stream['stream']['preview']);
@@ -88,14 +87,14 @@ class ApiTwitch extends ApiStreamerBase {
 	/**
 	 * Make an API request to the service.
 	 *
-	 * @access	protected
-	 * @param	array	URL bits to put between directory separators.
-	 * @return	mixed	Parsed JSON or false on error.
+	 * @access protected
+	 * @param  array	URL bits to put between directory separators.
+	 * @return mixed	Parsed JSON or false on error.
 	 */
 	protected function makeApiRequest($bits) {
 		global $wgTwitchClientId;
 
-		$req = MWHttpRequest::factory( $this->getFullRequestUrl($bits), [ 'timeout' => $this->getRequestOptions()['timeout'] ] );
+		$req = MWHttpRequest::factory($this->getFullRequestUrl($bits), ['timeout' => $this->getRequestOptions()['timeout']]);
 		$req->setHeader("Client-ID", $wgTwitchClientId);
 		$req->setHeader("Accept", "application/vnd.twitchtv.v5+json");
 		$req->execute();

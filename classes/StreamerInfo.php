@@ -3,31 +3,30 @@
  * Streamer
  * Streamer Info
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class StreamerInfo {
 	/**
 	 * Null Service
 	 *
-	 * @var		constant
+	 * @var constant
 	 */
 	const SERVICE_NULL = 0;
 
 	/**
 	 * Twitch Service
 	 *
-	 * @var		constant
+	 * @var constant
 	 */
 	const SERVICE_TWITCH = 1;
 
 	/**
 	 * Service Constant Map
 	 *
-	 * @var		array
+	 * @var array
 	 */
 	static private $serviceConstants = [
 		'twitch'	=> self::SERVICE_TWITCH
@@ -36,29 +35,29 @@ class StreamerInfo {
 	/**
 	 * Mediawiki Database Object
 	 *
-	 * @var		object
+	 * @var object
 	 */
 	private $DB = false;
 
 	/**
 	 * Data holder for database values.
 	 *
-	 * @var		array
+	 * @var array
 	 */
 	private $data = [];
 
 	/**
 	 * Fully loaded from the database.
 	 *
-	 * @var		boolean
+	 * @var boolean
 	 */
 	public $isLoaded = false;
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		$this->DB = wfGetDB(DB_MASTER);
@@ -67,12 +66,12 @@ class StreamerInfo {
 	/**
 	 * Function Documentation
 	 *
-	 * @access	public
-	 * @param	string	Service Name
-	 * @param	string	User Name on the Service
-	 * @return	mixed	Object on successful object creation, otherwise false on error.
+	 * @access public
+	 * @param  string	Service Name
+	 * @param  string	User Name on the Service
+	 * @return mixed	Object on successful object creation, otherwise false on error.
 	 */
-	static public function newFromServiceAndName($service, $name) {
+	public static function newFromServiceAndName($service, $name) {
 		$streamerInfo = new StreamerInfo();
 
 		$serviceId = self::getServiceId($service);
@@ -91,11 +90,11 @@ class StreamerInfo {
 	/**
 	 * Load a new object from a database row.
 	 *
-	 * @access	public
-	 * @param	array	Raw database row of streamer information.
-	 * @return	mixed	Object on successful object creation, otherwise false on error.
+	 * @access public
+	 * @param  array	Raw database row of streamer information.
+	 * @return mixed	Object on successful object creation, otherwise false on error.
 	 */
-	static public function newFromRow($data) {
+	public static function newFromRow($data) {
 		if ($data['streamer_id'] > 0) {
 			$streamerInfo = new StreamerInfo();
 
@@ -117,11 +116,11 @@ class StreamerInfo {
 	/**
 	 * Return the service constant for the named service.
 	 *
-	 * @access	public
-	 * @param	string	Service Name
-	 * @return	integer	Service Constant
+	 * @access public
+	 * @param  string	Service Name
+	 * @return integer	Service Constant
 	 */
-	static public function getServiceId($service) {
+	public static function getServiceId($service) {
 		$service = strtolower($service);
 		if (array_key_exists($service, self::$serviceConstants)) {
 			return self::$serviceConstants[$service];
@@ -132,18 +131,18 @@ class StreamerInfo {
 	/**
 	 * Return the list of service constants.
 	 *
-	 * @access	public
-	 * @return	array	Service Constants
+	 * @access public
+	 * @return array	Service Constants
 	 */
-	static public function getServicesList() {
+	public static function getServicesList() {
 		return self::$serviceConstants;
 	}
 
 	/**
 	 * Load from the database.
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function load() {
 		if (!$this->isLoaded) {
@@ -175,13 +174,13 @@ class StreamerInfo {
 	/**
 	 * Save to the database.
 	 *
-	 * @access	public
-	 * @return	boolean	Success
+	 * @access public
+	 * @return boolean	Success
 	 */
 	public function save() {
 		$success = false;
 
-		//Temporarily store and unset the streamer ID.
+		// Temporarily store and unset the streamer ID.
 		$streamerId = $this->data['streamer_id'];
 		unset($this->data['streamer_id']);
 
@@ -216,8 +215,8 @@ class StreamerInfo {
 	/**
 	 * Delete from the database.
 	 *
-	 * @access	public
-	 * @return	boolean	Success
+	 * @access public
+	 * @return boolean	Success
 	 */
 	public function delete() {
 		$success = false;
@@ -247,8 +246,8 @@ class StreamerInfo {
 	/**
 	 * Return if a database entry exists.
 	 *
-	 * @access	public
-	 * @return	boolean	Database Entry Exists
+	 * @access public
+	 * @return boolean	Database Entry Exists
 	 */
 	public function exists() {
 		$this->load();
@@ -258,9 +257,9 @@ class StreamerInfo {
 	/**
 	 * Set the Streamer Database ID.
 	 *
-	 * @access	protected
-	 * @param	integer	Streamer Database ID
-	 * @return	void
+	 * @access protected
+	 * @param  integer	Streamer Database ID
+	 * @return void
 	 */
 	protected function setId($streamerId) {
 		$this->data['streamer_id'] = intval($streamerId);
@@ -269,8 +268,8 @@ class StreamerInfo {
 	/**
 	 * Return the Streamer Database ID.
 	 *
-	 * @access	public
-	 * @return	integer	Streamer Database ID
+	 * @access public
+	 * @return integer	Streamer Database ID
 	 */
 	public function getId() {
 		$this->load();
@@ -280,9 +279,9 @@ class StreamerInfo {
 	/**
 	 * Set the service ID.
 	 *
-	 * @access	public
-	 * @return	integer	Service Number from Constant
-	 * @return	boolean	Success
+	 * @access public
+	 * @return integer	Service Number from Constant
+	 * @return boolean	Success
 	 */
 	public function setService($service) {
 		$service = intval($service);
@@ -297,8 +296,8 @@ class StreamerInfo {
 	/**
 	 * Return the service ID.
 	 *
-	 * @access	public
-	 * @return	integer	Service ID
+	 * @access public
+	 * @return integer	Service ID
 	 */
 	public function getService() {
 		$this->load();
@@ -308,9 +307,9 @@ class StreamerInfo {
 	/**
 	 * Set the streamer name.
 	 *
-	 * @access	public
-	 * @return	string	Streamer Name
-	 * @return	boolean	Success
+	 * @access public
+	 * @return string	Streamer Name
+	 * @return boolean	Success
 	 */
 	public function setRemoteName($name) {
 		if (!empty($name)) {
@@ -324,8 +323,8 @@ class StreamerInfo {
 	/**
 	 * Return the streamer name
 	 *
-	 * @access	public
-	 * @return	string	Streamer Name
+	 * @access public
+	 * @return string	Streamer Name
 	 */
 	public function getRemoteName() {
 		$this->load();
@@ -335,9 +334,9 @@ class StreamerInfo {
 	/**
 	 * Set the display name for this streamer.
 	 *
-	 * @access	public
-	 * @return	mixed	[Optional] Display Name - Set to null to null out in the database.
-	 * @return	boolean	Success
+	 * @access public
+	 * @return mixed	[Optional] Display Name - Set to null to null out in the database.
+	 * @return boolean	Success
 	 */
 	public function setDisplayName($displayName = null) {
 		$this->data['display_name'] = $displayName;
@@ -347,8 +346,8 @@ class StreamerInfo {
 	/**
 	 * Return the display name for this streamer.
 	 *
-	 * @access	public
-	 * @return	string	Display Name
+	 * @access public
+	 * @return string	Display Name
 	 */
 	public function getDisplayName() {
 		$this->load();
@@ -358,12 +357,12 @@ class StreamerInfo {
 	/**
 	 * Set the Page Title for this streamer.
 	 *
-	 * @access	public
-	 * @return	mixed	Title object or null.
-	 * @return	boolean	Success
+	 * @access public
+	 * @return mixed	Title object or null.
+	 * @return boolean	Success
 	 */
 	public function setPageTitle($title) {
-		if ($title instanceOf Title) {
+		if ($title instanceof Title) {
 			$this->data['page_title'] = $title;
 		} else {
 			$this->data['page_title'] = null;
@@ -385,12 +384,12 @@ class StreamerInfo {
 	/**
 	 * Return a title page link.
 	 *
-	 * @access	public
-	 * @return	string	Title string form ready for parsing or false on error.
+	 * @access public
+	 * @return string	Title string form ready for parsing or false on error.
 	 */
 	public function getLink() {
 		$link = false;
-		if ($this->getPageTitle() instanceOf Title) {
+		if ($this->getPageTitle() instanceof Title) {
 			$link = $this->getPageTitle()->getFullURL();
 		}
 

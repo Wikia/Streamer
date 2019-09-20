@@ -3,17 +3,16 @@
  * Streamer
  * Streamer Hooks
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class StreamerHooks {
 	/**
 	 * Valid parameters.
 	 *
-	 * @var		array
+	 * @var array
 	 */
 	static private $parameters = [
 		'service' => [
@@ -53,18 +52,18 @@ class StreamerHooks {
 	/**
 	 * Any error messages that may have been triggerred.
 	 *
-	 * @var		array
+	 * @var array
 	 */
 	static private $errors = false;
 
-    /**
-     * Sets up this extension's parser functions.
-     *
-     * @access	public
-     * @param	object	Parser object passed as a reference.
-     * @return	boolean	true
-     */
-    static public function onParserFirstCallInit(Parser &$parser) {
+	/**
+	 * Sets up this extension's parser functions.
+	 *
+	 * @access public
+	 * @param  object	Parser object passed as a reference.
+	 * @return boolean	true
+	 */
+	public static function onParserFirstCallInit(Parser &$parser) {
 		if (!defined('STREAMER_VERSION')) {
 			define('STREAMER_VERSION', '0.6.0');
 		}
@@ -78,13 +77,13 @@ class StreamerHooks {
 	/**
 	 * Displays streamer information for the given parameters.
 	 *
-	 * @access	public
-	 * @param	object	Parser
-	 * @param	object	PPFrame
-	 * @param	array	Arguments
-	 * @return	array	Generated Output
+	 * @access public
+	 * @param  object	Parser
+	 * @param  object	PPFrame
+	 * @param  array	Arguments
+	 * @return array	Generated Output
 	 */
-	static public function parseStreamerTag(Parser &$parser, PPFrame $frame, $arguments) {
+	public static function parseStreamerTag(Parser &$parser, PPFrame $frame, $arguments) {
 		self::$errors = false;
 
 		/************************************/
@@ -120,7 +119,7 @@ class StreamerHooks {
 						$link = $streamerInfo->getLink();
 					}
 					if (!$link) {
-						//Fallback in case of no actual links.
+						// Fallback in case of no actual links.
 						$link = $streamer->getChannelUrl();
 					}
 
@@ -143,15 +142,15 @@ class StreamerHooks {
 					$parser->getOutput()->addModuleStyles(['ext.streamer']);
 				}
 			} else {
-				self::setError('streamer_error_missing_service', 'Api'.ucfirst($parameters['service']));
+				self::setError('streamer_error_missing_service', 'Api' . ucfirst($parameters['service']));
 			}
 		}
 
 		if (self::$errors !== false) {
 			$html = "
 			<div class='errorbox'>
-				<strong>Streamer ".STREAMER_VERSION."</strong><br/>
-				".implode("<br/>\n", self::$errors)."
+				<strong>Streamer " . STREAMER_VERSION . "</strong><br/>
+				" . implode("<br/>\n", self::$errors) . "
 			</div>";
 		}
 
@@ -165,13 +164,13 @@ class StreamerHooks {
 	/**
 	 * Update database records for streamer information from the streamerinfo tag.
 	 *
-	 * @access	public
-	 * @param	object	Parser
-	 * @param	object	PPFrame
-	 * @param	array	Arguments
-	 * @return	array	Generated Output
+	 * @access public
+	 * @param  object	Parser
+	 * @param  object	PPFrame
+	 * @param  array	Arguments
+	 * @return array	Generated Output
 	 */
-	static public function parseStreamerInfoTag(Parser &$parser, PPFrame $frame, $arguments) {
+	public static function parseStreamerInfoTag(Parser &$parser, PPFrame $frame, $arguments) {
 		self::$errors = false;
 
 		$title = $parser->getTitle();
@@ -225,8 +224,8 @@ class StreamerHooks {
 		if (self::$errors !== false) {
 			$html = "
 			<div class='errorbox'>
-				<strong>Streamer ".STREAMER_VERSION."</strong><br/>
-				".implode("<br/>\n", self::$errors)."
+				<strong>Streamer " . STREAMER_VERSION . "</strong><br/>
+				" . implode("<br/>\n", self::$errors) . "
 			</div>";
 		}
 
@@ -240,12 +239,12 @@ class StreamerHooks {
 	/**
 	 * Clean user supplied parameters and setup defaults.
 	 *
-	 * @access	private
-	 * @param	array	Raw strings of 'parameter=option'.
-	 * @return	array	Safe Parameter => Option key value pairs.
+	 * @access private
+	 * @param  array	Raw strings of 'parameter=option'.
+	 * @return array	Safe Parameter => Option key value pairs.
 	 */
-	static private function cleanAndSetupParameters($rawParameterOptions) {
-		//Check user supplied parameters.
+	private static function cleanAndSetupParameters($rawParameterOptions) {
+		// Check user supplied parameters.
 		foreach ($rawParameterOptions as $raw) {
 			$equals = strpos($raw, '=');
 			if ($equals === false || $equals === 0 || $equals === strlen($raw) - 1) {
@@ -259,7 +258,7 @@ class StreamerHooks {
 			if (isset(self::$parameters[$parameter])) {
 				if (array_key_exists('values', self::$parameters[$parameter]) && is_array(self::$parameters[$parameter]['values'])) {
 					if (!in_array($option, self::$parameters[$parameter]['values'])) {
-						//Throw an error.
+						// Throw an error.
 						self::setError('streamer_error_invalid_option', [$parameter, $option]);
 					} else {
 						$cleanParameterOptions[$parameter] = $option;
@@ -276,7 +275,7 @@ class StreamerHooks {
 			if ($parameterData['required'] && !array_key_exists($parameter, $cleanParameterOptions)) {
 				self::setError('streamer_error_parameter_required', [$parameter]);
 			}
-			//Assign the default if not supplied by the user and a default exists.
+			// Assign the default if not supplied by the user and a default exists.
 			if (!$parameterData['required'] && !array_key_exists($parameter, $cleanParameterOptions) && $parameterData['default'] !== null) {
 				$cleanParameterOptions[$parameter] = $parameterData['default'];
 			}
@@ -288,12 +287,12 @@ class StreamerHooks {
 	/**
 	 * Return a parsed template with variables replaced.
 	 *
-	 * @access	private
-	 * @param	string	Template Name - Either a built in template or a namespaced template.
-	 * @param	array	Replacement Variables
-	 * @return	string	HTML
+	 * @access private
+	 * @param  string	Template Name - Either a built in template or a namespaced template.
+	 * @param  array	Replacement Variables
+	 * @return string	HTML
 	 */
-	static private function getTemplateWithReplacements($template, $variables) {
+	private static function getTemplateWithReplacements($template, $variables) {
 		$rawTemplate = StreamerTemplate::get($template);
 
 		if ($rawTemplate !== false) {
@@ -308,41 +307,41 @@ class StreamerHooks {
 	/**
 	 * Set a non-fatal error to be returned to the end user later.
 	 *
-	 * @access	private
-	 * @param	string	Message language string.
-	 * @param	array	Message replacements.
-	 * @return	void
+	 * @access private
+	 * @param  string	Message language string.
+	 * @param  array	Message replacements.
+	 * @return void
 	 */
-	static private function setError($message, $replacements) {
+	private static function setError($message, $replacements) {
 		self::$errors[] = wfMessage($message, $replacements)->escaped();
 	}
 
 	/**
 	 * Catch when #streamerinfo tags are removed and delete from the database.
 	 *
-	 * @access	public
-	 * @param	object	WikiPage modified
-	 * @param	object	User performing the modification
-	 * @param	object	Content object
-	 * @param	string	Edit summary/comment
-	 * @param	boolean	Whether or not the edit was marked as minor
-	 * @param	boolean	$isWatch: (No longer used)
-	 * @param	object	$section: (No longer used)
-	 * @param	integer	Flags passed to WikiPage::doEditContent()
-	 * @param	mixed	New Revision object of the article
-	 * @param	object	Status object about to be returned by doEditContent()
-	 * @param	integer	The revision ID (or false) this edit was based on
-	 * @return	boolean True
+	 * @access public
+	 * @param  object	WikiPage modified
+	 * @param  object	User performing the modification
+	 * @param  object	Content object
+	 * @param  string	Edit summary/comment
+	 * @param  boolean	Whether or not the edit was marked as minor
+	 * @param  boolean                                                        $isWatch: (No longer used)
+	 * @param  object                                                         $section: (No longer used)
+	 * @param  integer	Flags passed to WikiPage::doEditContent()
+	 * @param  mixed	New Revision object of the article
+	 * @param  object	Status object about to be returned by doEditContent()
+	 * @param  integer	The revision ID (or false) this edit was based on
+	 * @return boolean True
 	 */
-	static public function onPageContentSaveComplete($article, $user, $content, $summary, $isMinor, $isWatch, $section, $flags, $revision, $status, $baseRevId) {
-		if ($revision instanceOf Revision) {
+	public static function onPageContentSaveComplete($article, $user, $content, $summary, $isMinor, $isWatch, $section, $flags, $revision, $status, $baseRevId) {
+		if ($revision instanceof Revision) {
 			$revisionContent = $revision->getContent(Revision::RAW);
 			$previousRevision = $revision->getPrevious();
 
-			if ($previousRevision instanceOf Revision) {
+			if ($previousRevision instanceof Revision) {
 				$previousRevisionContent = $previousRevision->getContent(Revision::RAW);
 				if (strpos($previousRevisionContent->getNativeData(), "{{#streamerinfo") !== false && strpos($revisionContent->getNativeData(), "{{#streamerinfo") === false) {
-					//Time to remove from the database.
+					// Time to remove from the database.
 					$DB = wfGetDB(DB_MASTER);
 					$result = $DB->select(
 						['streamer'],
@@ -366,11 +365,11 @@ class StreamerHooks {
 	/**
 	 * Setups and Modifies Database Information
 	 *
-	 * @access	public
-	 * @param	object	DatabaseUpdater Object
-	 * @return	boolean	true
+	 * @access public
+	 * @param  object	DatabaseUpdater Object
+	 * @return boolean	true
 	 */
-	static public function onLoadExtensionSchemaUpdates($updater = null) {
+	public static function onLoadExtensionSchemaUpdates($updater = null) {
 		$extDir = __DIR__;
 		$updater->addExtensionUpdate(['addTable', 'streamer', "{$extDir}/install/sql/streamer_table_streamer.sql", true]);
 

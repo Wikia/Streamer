@@ -3,25 +3,24 @@
  * Streamer
  * Mixer API
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class ApiMixer extends ApiStreamerBase {
 	/**
 	 * API Entry Point
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $apiEntryPoint = "https://mixer.com/api/v1/";
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		$this->service = 'mixer';
@@ -32,9 +31,9 @@ class ApiMixer extends ApiStreamerBase {
 	 * Set the user identifier.
 	 * This function should do any validation and return a boolean.
 	 *
-	 * @access	public
-	 * @return	string	User Identifier
-	 * @return	boolean	Success
+	 * @access public
+	 * @return string	User Identifier
+	 * @return boolean	Success
 	 */
 	public function setUser($user) {
 		if (preg_match("#^[\w]+$#i", $user) !== 1) {
@@ -49,13 +48,13 @@ class ApiMixer extends ApiStreamerBase {
 		/*********************/
 		/* Search            */
 		/*********************/
-		if (($json = $this->makeApiRequest(['users', 'search?query='.$this->user])) === false) {
+		if (($json = $this->makeApiRequest(['users', 'search?query=' . $this->user])) === false) {
 			return false;
 		}
 
 		$userId = false;
 		foreach ($json as $user) {
-			//The request might return more than one user.  Loop through the results and find the correct one.
+			// The request might return more than one user.  Loop through the results and find the correct one.
 			$lowercaseUser = mb_strtolower($this->user, 'UTF-8');
 			if (mb_strtolower($user['username'], 'UTF-8') == $lowercaseUser) {
 				$userId = $user['id'];
@@ -78,7 +77,7 @@ class ApiMixer extends ApiStreamerBase {
 		if (isset($json['username'])) {
 			$this->setName($json['username']);
 			$this->setLogo($json['avatarUrl']);
-			$this->setChannelUrl("https://mixer.com/".$json['username']);
+			$this->setChannelUrl("https://mixer.com/" . $json['username']);
 			$this->setLifetimeViews($json['channel']['viewersTotal']);
 			$this->setFollowers($json['channel']['numFollowers']);
 			$this->setViewers($json['channel']['viewersCurrent']);
@@ -100,7 +99,7 @@ class ApiMixer extends ApiStreamerBase {
 
 		$this->setDoing($json['type']['name']);
 
-		$this->setThumbnail($this->getLogo()); //@TODO: If mixer.com ever supports an actual video thumbnail it should changed here.
+		$this->setThumbnail($this->getLogo()); // @TODO: If mixer.com ever supports an actual video thumbnail it should changed here.
 
 		$this->updateCache();
 
@@ -110,9 +109,9 @@ class ApiMixer extends ApiStreamerBase {
 	/**
 	 * Make an API request to Mixer.  Mixer returns error codes inside their JSON and can be handled gracefully.
 	 *
-	 * @access	protected
-	 * @param	array	URL bits to put between directory separators.
-	 * @return	mixed	Parsed JSON or false on error.
+	 * @access protected
+	 * @param  array	URL bits to put between directory separators.
+	 * @return mixed	Parsed JSON or false on error.
 	 */
 	protected function makeApiRequest($bits) {
 		$json = parent::makeApiRequest($bits);
@@ -126,8 +125,8 @@ class ApiMixer extends ApiStreamerBase {
 	/**
 	 * Return default request options for MWHttpRequest.  Includes basics such as user agent and character encoding.
 	 *
-	 * @access	protected
-	 * @return	array	Request Options
+	 * @access protected
+	 * @return array	Request Options
 	 */
 	protected function getRequestOptions() {
 		return array_merge(

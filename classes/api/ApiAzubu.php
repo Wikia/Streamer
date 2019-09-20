@@ -3,25 +3,24 @@
  * Streamer
  * Azubu API
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class ApiAzubu extends ApiStreamerBase {
 	/**
 	 * API Entry Point
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $apiEntryPoint = "http://api.azubu.tv/";
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		$this->service = 'azubu';
@@ -32,9 +31,9 @@ class ApiAzubu extends ApiStreamerBase {
 	 * Set the user identifier.
 	 * This function should do any validation and return a boolean.
 	 *
-	 * @access	public
-	 * @return	string	User Identifier
-	 * @return	boolean	Success
+	 * @access public
+	 * @return string	User Identifier
+	 * @return boolean	Success
 	 */
 	public function setUser($user) {
 		if (preg_match("#^[\w]+$#i", $user) !== 1) {
@@ -46,7 +45,7 @@ class ApiAzubu extends ApiStreamerBase {
 			return true;
 		}
 
-		if (($json = $this->makeApiRequest(['public', 'channel', 'list?channels='.$this->user])) === false) {
+		if (($json = $this->makeApiRequest(['public', 'channel', 'list?channels=' . $this->user])) === false) {
 			return false;
 		}
 
@@ -61,7 +60,7 @@ class ApiAzubu extends ApiStreamerBase {
 			$this->setStatus($json['title']);
 			$this->setFollowers($json['followers_count']);
 			$this->setOnline($json['is_live']);
-			$this->setThumbnail($json['url_thumbnail']); //@TODO: If Azubu.tv ever supports an actual video thumbnail it should changed here.
+			$this->setThumbnail($json['url_thumbnail']); // @TODO: If Azubu.tv ever supports an actual video thumbnail it should changed here.
 		}
 
 		$this->updateCache();
