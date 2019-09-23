@@ -3,21 +3,20 @@
  * Streamer
  * Streamer Template
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 class StreamerTemplate {
 	/**
 	 * Get a built in or custom template.
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
-	static public function get($template) {
-		$function = '_'.$template;
+	public static function get($template) {
+		$function = '_' . $template;
 		if (method_exists('StreamerTemplate', $function)) {
 			return self::$function();
 		}
@@ -38,16 +37,16 @@ class StreamerTemplate {
 	/**
 	 * Built In 'block' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _block() {
+	public static function _block() {
 		$html = "
 			<div class='stream block'>
 				<div class='logo'><img src='{{#if:%THUMBNAIL%|%THUMBNAIL%|%LOGO%}}'/></div>
 				<div class='stream_info'>
 					<div class='name'><a href='%LINK%'>%NAME%</a></div>
-					<div class='online {{#ifeq:%ONLINE%|1|live|offline}}'><div class='dot'></div><div class='text'>{{#ifeq:%ONLINE%|1|".wfMessage('stream_online')->escaped()."|".wfMessage('stream_offline')->escaped()."}}</div></div>
+					<div class='online {{#ifeq:%ONLINE%|1|live|offline}}'><div class='dot'></div><div class='text'>{{#ifeq:%ONLINE%|1|" . wfMessage('stream_online')->escaped() . "|" . wfMessage('stream_offline')->escaped() . "}}</div></div>
 				</div>
 			</div>";
 
@@ -57,15 +56,15 @@ class StreamerTemplate {
 	/**
 	 * Built In 'live' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _live() {
+	public static function _live() {
 		$html = "
 			<div class='stream live'>
 				<div class='stream_info'>
 					<div class='name'><a href='%LINK%'>%NAME%</a></div>
-					<div class='online {{#ifeq:%ONLINE%|1|live|offline}}'><div class='dot'></div><div class='text'>{{#ifeq:%ONLINE%|1|".wfMessage('stream_online')->escaped()."|".wfMessage('stream_offline')->escaped()."}}</div></div>
+					<div class='online {{#ifeq:%ONLINE%|1|live|offline}}'><div class='dot'></div><div class='text'>{{#ifeq:%ONLINE%|1|" . wfMessage('stream_online')->escaped() . "|" . wfMessage('stream_offline')->escaped() . "}}</div></div>
 				</div>
 			</div>";
 
@@ -75,10 +74,10 @@ class StreamerTemplate {
 	/**
 	 * Built In 'live' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _minilive() {
+	public static function _minilive() {
 		$html = "
 			<div class='stream minilive'>
 				<div class='stream_info'>
@@ -93,10 +92,10 @@ class StreamerTemplate {
 	/**
 	 * Built In 'link' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _link() {
+	public static function _link() {
 		$html = "<div class='name'><a href='%LINK%'>%NAME%</a></div>";
 
 		return $html;
@@ -105,10 +104,10 @@ class StreamerTemplate {
 	/**
 	 * Built In 'viewers' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _viewers() {
+	public static function _viewers() {
 		$html = "
 			<div class='stream viewers'>
 				<div class='stream_info'>
@@ -123,10 +122,10 @@ class StreamerTemplate {
 	/**
 	 * Built In 'thumbnail' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _thumbnail() {
+	public static function _thumbnail() {
 		$html = "
 			<div class='stream thumbnail'>
 				<div class='logo'><img src='{{#if:%THUMBNAIL%|%THUMBNAIL%|%LOGO%}}'/></div>
@@ -138,10 +137,10 @@ class StreamerTemplate {
 	/**
 	 * Built In 'debug' template.
 	 *
-	 * @access	public
-	 * @return	string	HTML
+	 * @access public
+	 * @return string	HTML
 	 */
-	static public function _debug() {
+	public static function _debug() {
 		$html = "
 			<div class='stream debug'>
 				<ul>

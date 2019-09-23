@@ -3,86 +3,85 @@
  * Streamer
  * Streamer API Base
  *
- * @license		LGPLv3
- * @package		Streamer
- * @link		https://www.mediawiki.org/wiki/Extension:Streamer
- *
+ * @license LGPLv3
+ * @package Streamer
+ * @link    https://www.mediawiki.org/wiki/Extension:Streamer
  **/
 
 abstract class ApiStreamerBase {
 	/**
 	 * User Agent for HTTP Requests
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	private $userAgent = null;
 
 	/**
 	 * Service Identifier
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $service = null;
 
 	/**
 	 * User Identifier
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $user = null;
 
 	/**
 	 * Streamer Data
 	 *
-	 * @var		array
+	 * @var array
 	 */
 	private $data = [];
 
 	/**
 	 * Mediawiki Cache Object
 	 *
-	 * @var		object
+	 * @var object
 	 */
 	private $cache = null;
 
 	/**
 	 * Cache Key
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	private $cacheKey = null;
 
 	/**
 	 * API Entry Point
 	 *
-	 * @var		string
+	 * @var string
 	 */
 	protected $apiEntryPoint = null;
 
 	/**
 	 * Main Constructor
 	 *
-	 * @access	public
-	 * @return	void
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		global $wgServer, $wgVersion;
 
 		$this->cache = wfGetCache(CACHE_ANYTHING);
 
-		$this->userAgent = $wgServer." (MediaWiki/{$wgVersion}; Streamer ".STREAMER_VERSION.")";
+		$this->userAgent = $wgServer . " (MediaWiki/{$wgVersion}; Streamer " . STREAMER_VERSION . ")";
 	}
 
 	/**
 	 * Return a new object based on the user and service names.
 	 *
-	 * @access	public
-	 * @param	string	User
-	 * @param	string	Service
-	 * @return	mixed	New service specific API class or false on error.
+	 * @access public
+	 * @param  string	User
+	 * @param  string	Service
+	 * @return mixed	New service specific API class or false on error.
 	 */
-	final static public function newFromService($service) {
-		$class = 'Api'.ucfirst($service);
+	final public static function newFromService($service) {
+		$class = 'Api' . ucfirst($service);
 		if (class_exists($class)) {
 			return new $class;
 		}
@@ -93,17 +92,17 @@ abstract class ApiStreamerBase {
 	 * Set the user identifier.
 	 * This function should do any validation and return a boolean.
 	 *
-	 * @access	public
-	 * @return	string	User Identifier
-	 * @return	boolean	Success
+	 * @access public
+	 * @return string	User Identifier
+	 * @return boolean	Success
 	 */
 	abstract public function setUser($user);
 
 	/**
 	 * Return the user identifier.
 	 *
-	 * @access	public
-	 * @return	string	User Identifier
+	 * @access public
+	 * @return string	User Identifier
 	 */
 	public function getUser() {
 		return $this->user;
@@ -112,9 +111,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set the streamer name.
 	 *
-	 * @access	protected
-	 * @return	string	Streamer Name
-	 * @return	void
+	 * @access protected
+	 * @return string	Streamer Name
+	 * @return void
 	 */
 	protected function setName($name) {
 		$this->data['name'] = $name;
@@ -123,8 +122,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return the streamer name
 	 *
-	 * @access	public
-	 * @return	string	Streamer Name
+	 * @access public
+	 * @return string	Streamer Name
 	 */
 	public function getName() {
 		return $this->data['name'];
@@ -133,9 +132,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set the current live viewers.
 	 *
-	 * @access	protected
-	 * @return	integer	Current Live Viewers
-	 * @return	void
+	 * @access protected
+	 * @return integer	Current Live Viewers
+	 * @return void
 	 */
 	protected function setViewers($viewers) {
 		$this->data['viewers'] = intval($viewers);
@@ -144,8 +143,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return the current live viewers.
 	 *
-	 * @access	public
-	 * @return	integer	Current Live Viewers
+	 * @access public
+	 * @return integer	Current Live Viewers
 	 */
 	public function getViewers() {
 		return intval($this->data['viewers']);
@@ -154,9 +153,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set a logo for this stream.
 	 *
-	 * @access	protected
-	 * @return	string	Fully qualified URL to the logo.
-	 * @return	void
+	 * @access protected
+	 * @return string	Fully qualified URL to the logo.
+	 * @return void
 	 */
 	protected function setLogo($logo) {
 		$this->data['logo'] = $logo;
@@ -165,8 +164,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return a logo for this stream.
 	 *
-	 * @access	public
-	 * @return	string	Fully qualified URL to the logo.
+	 * @access public
+	 * @return string	Fully qualified URL to the logo.
 	 */
 	public function getLogo() {
 		return $this->data['logo'];
@@ -175,9 +174,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set a thumbnail for this stream.
 	 *
-	 * @access	protected
-	 * @return	string	Fully qualified URL to the thumbnail.
-	 * @return	void
+	 * @access protected
+	 * @return string	Fully qualified URL to the thumbnail.
+	 * @return void
 	 */
 	protected function setThumbnail($thumbnail) {
 		$this->data['thumbnail'] = $thumbnail;
@@ -186,8 +185,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return a thumbnail for this stream.
 	 *
-	 * @access	public
-	 * @return	string	Fully qualified URL to the thumbnail.
+	 * @access public
+	 * @return string	Fully qualified URL to the thumbnail.
 	 */
 	public function getThumbnail() {
 		return $this->data['thumbnail'];
@@ -196,9 +195,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set a status message for this stream.
 	 *
-	 * @access	protected
-	 * @return	string	Status Message
-	 * @return	void
+	 * @access protected
+	 * @return string	Status Message
+	 * @return void
 	 */
 	protected function setStatus($status) {
 		$this->data['status'] = $status;
@@ -207,8 +206,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return a status message for this stream.
 	 *
-	 * @access	public
-	 * @return	string	Status Message
+	 * @access public
+	 * @return string	Status Message
 	 */
 	public function getStatus() {
 		return $this->data['status'];
@@ -217,30 +216,30 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set the online/offline streaming status.
 	 *
-	 * @access	protected
-	 * @return	boolean	True, Online.  False, Offline
-	 * @return	void
+	 * @access protected
+	 * @return boolean	True, Online.  False, Offline
+	 * @return void
 	 */
 	protected function setOnline($online) {
-		$this->data['online'] = (bool) $online;
+		$this->data['online'] = (bool)$online;
 	}
 
 	/**
 	 * Return the online/offline streaming status.
 	 *
-	 * @access	public
-	 * @return	boolean	True, Online.  False, Offline
+	 * @access public
+	 * @return boolean	True, Online.  False, Offline
 	 */
 	public function getOnline() {
-		return (bool) $this->data['online'];
+		return (bool)$this->data['online'];
 	}
 
 	/**
 	 * Set the lifetime stream views.(Previous, current, and live.)
 	 *
-	 * @access	protected
-	 * @return	integer	Lifetime Views
-	 * @return	void
+	 * @access protected
+	 * @return integer	Lifetime Views
+	 * @return void
 	 */
 	protected function setLifetimeViews($lifetimeViews) {
 		$this->data['lifetimeViews'] = intval($lifetimeViews);
@@ -249,8 +248,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return the lifetime stream views.(Previous, current, and live.)
 	 *
-	 * @access	public
-	 * @return	integer	Lifetime Views
+	 * @access public
+	 * @return integer	Lifetime Views
 	 */
 	public function getLifetimeViews() {
 		return intval($this->data['lifetimeViews']);
@@ -259,9 +258,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set the number of followers.
 	 *
-	 * @access	protected
-	 * @return	integer	Followers
-	 * @return	void
+	 * @access protected
+	 * @return integer	Followers
+	 * @return void
 	 */
 	protected function setFollowers($followers) {
 		$this->data['followers'] = intval($followers);
@@ -270,8 +269,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return the number of followers.
 	 *
-	 * @access	public
-	 * @return	integer	Followers
+	 * @access public
+	 * @return integer	Followers
 	 */
 	public function getFollowers() {
 		return intval($this->data['followers']);
@@ -280,9 +279,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set what the streamer is currently doing.
 	 *
-	 * @access	protected
-	 * @return	string	Currently Doing
-	 * @return	void
+	 * @access protected
+	 * @return string	Currently Doing
+	 * @return void
 	 */
 	protected function setDoing($doing) {
 		$this->data['doing'] = $doing;
@@ -291,8 +290,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return what the streamer is currently doing.
 	 *
-	 * @access	public
-	 * @return	string	Currently Doing
+	 * @access public
+	 * @return string	Currently Doing
 	 */
 	public function getDoing() {
 		return $this->data['doing'];
@@ -301,9 +300,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Set channel URL.
 	 *
-	 * @access	protected
-	 * @return	string	Fully Qualified Channel URL
-	 * @return	void
+	 * @access protected
+	 * @return string	Fully Qualified Channel URL
+	 * @return void
 	 */
 	protected function setChannelUrl($channelUrl) {
 		$this->data['channelUrl'] = $channelUrl;
@@ -312,8 +311,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return the channel URL.
 	 *
-	 * @access	public
-	 * @return	string	Fully Qualified Channel URL
+	 * @access public
+	 * @return string	Fully Qualified Channel URL
 	 */
 	public function getChannelUrl() {
 		return $this->data['channelUrl'];
@@ -322,8 +321,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Possibly return parsed JSON data into an array.
 	 *
-	 * @access	protected
-	 * @return	mixed	Array, parsed JSON data.  False on error.
+	 * @access protected
+	 * @return mixed	Array, parsed JSON data.  False on error.
 	 */
 	protected function parseRawJson($rawJson) {
 		if ($rawJson === false) {
@@ -341,9 +340,9 @@ abstract class ApiStreamerBase {
 	/**
 	 * Make an API request to the service.
 	 *
-	 * @access	protected
-	 * @param	array	URL bits to put between directory separators.
-	 * @return	mixed	Parsed JSON or false on error.
+	 * @access protected
+	 * @param  array	URL bits to put between directory separators.
+	 * @return mixed	Parsed JSON or false on error.
 	 */
 	protected function makeApiRequest($bits) {
 		$rawJson = Http::request('GET', $this->getFullRequestUrl($bits), $this->getRequestOptions());
@@ -359,19 +358,19 @@ abstract class ApiStreamerBase {
 	/**
 	 * Return an assembled URL to use for API requests.
 	 *
-	 * @access	protected
-	 * @param	array	URL bits to put between directory separators.
-	 * @return	string	Full URL
+	 * @access protected
+	 * @param  array	URL bits to put between directory separators.
+	 * @return string	Full URL
 	 */
 	protected function getFullRequestUrl($bits) {
-		return $this->apiEntryPoint.implode('/', $bits);
+		return $this->apiEntryPoint . implode('/', $bits);
 	}
 
 	/**
 	 * Return default request options for MWHttpRequest.  Includes basics such as user agent and character encoding.
 	 *
-	 * @access	protected
-	 * @return	array	Request Options
+	 * @access protected
+	 * @return array	Request Options
 	 */
 	protected function getRequestOptions() {
 		return [
@@ -383,8 +382,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Possibly load a cache of streamer information into the object.
 	 *
-	 * @access	public
-	 * @return	boolean	Success
+	 * @access public
+	 * @return boolean	Success
 	 */
 	protected function loadCache() {
 		$this->setCacheKey();
@@ -403,8 +402,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Update cache of streamer information.
 	 *
-	 * @access	protected
-	 * @return	void
+	 * @access protected
+	 * @return void
 	 */
 	protected function updateCache() {
 		$this->setCacheKey();
@@ -414,8 +413,8 @@ abstract class ApiStreamerBase {
 	/**
 	 * Function Documentation
 	 *
-	 * @access	protected
-	 * @return	void
+	 * @access protected
+	 * @return void
 	 */
 	protected function setCacheKey() {
 		$this->cacheKey = wfMemcKey('streamer', $this->service, $this->user);
