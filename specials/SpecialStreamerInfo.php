@@ -16,6 +16,8 @@ class SpecialStreamerInfo extends SpecialPage {
 	 */
 	private $content;
 
+	private $streamer;
+
 	/**
 	 * Main Constructor
 	 *
@@ -76,6 +78,7 @@ class SpecialStreamerInfo extends SpecialPage {
 			__METHOD__
 		);
 
+		$streamers = [];
 		while ($row = $result->fetchRow()) {
 			if (is_array($row) && $row['streamer_id'] > 0) {
 				$streamers[] = StreamerInfo::newFromRow($row);
@@ -134,6 +137,7 @@ class SpecialStreamerInfo extends SpecialPage {
 	 */
 	private function streamerInfoSave() {
 		$success = false;
+		$errors = null;
 		if ($this->wgRequest->getVal('do') == 'save') {
 			if (!$this->streamer->setService($this->wgRequest->getInt('service'))) {
 				$errors['service'] = wfMessage('error_sis_bad_service')->escaped();

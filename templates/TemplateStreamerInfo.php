@@ -10,13 +10,6 @@
 
 class TemplateStreamerInfo {
 	/**
-	 * Output HTML
-	 *
-	 * @var string
-	 */
-	private $HTML;
-
-	/**
 	 * List of Streamer Information
 	 *
 	 * @access public
@@ -24,7 +17,7 @@ class TemplateStreamerInfo {
 	 * @return string	Built HTML
 	 */
 	public function streamerInfoPage($streamers) {
-		$HTML .= Linker::link(Title::newFromText("Special:StreamerInfo/edit"), wfMessage('sip_add')->escaped()) . "
+		$HTML = Linker::link(Title::newFromText("Special:StreamerInfo/edit"), wfMessage('sip_add')->escaped()) . "
 		<table class='wikitable'>
 			<thead>
 				<tr>
@@ -72,7 +65,7 @@ class TemplateStreamerInfo {
 	 */
 	public function streamerInfoForm($streamer, $errors) {
 		$title = Title::newFromText("Special:StreamerInfo/edit");
-		$HTML .= "
+		$HTML = "
 		<form id='streamer_info_form' method='post' action='{$title->getFullURL()}?do=save'>
 			" . ($errors['service'] ? '<span class="error">' . $errors['service'] . '</span><br/>' : '') . "
 			<label for='service' class='label_above'>" . wfMessage('sif_service')->escaped() . "</label><br/>
@@ -114,7 +107,7 @@ class TemplateStreamerInfo {
 	 */
 	public function streamerInfoDelete($streamer) {
 		$title = Title::newFromText("Special:StreamerInfo/delete");
-		$HTML .= "
+		$HTML = "
 		<form id='streamer_info_form' method='post' action='{$title->getFullURL()}?confirm=true'>
 			" . wfMessage('sid_streamer_delete_confirm')->escaped() . "<br/>
 			<input id='streamer_id' name='streamer_id' type='hidden' value='{$streamer->getId()}'/>

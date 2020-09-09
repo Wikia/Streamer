@@ -44,7 +44,13 @@ class StreamerInfo {
 	 *
 	 * @var array
 	 */
-	private $data = [];
+	private $data = [
+		'streamer_id' => 0,
+		'remote_name' => '',
+		'service' => 0,
+		'display_name' => '',
+		'page_title' => null
+	];
 
 	/**
 	 * Fully loaded from the database.
@@ -159,7 +165,7 @@ class StreamerInfo {
 			$row = $result->fetchRow();
 
 			if (is_array($row)) {
-				$this->data = $row;
+				$this->data = array_intersect_key($row, $this->data);
 				$title = Title::newFromDBkey($row['page_title']);
 				if ($title !== null) {
 					$this->setPageTitle($title);
