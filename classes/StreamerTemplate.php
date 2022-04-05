@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * Streamer
  * Streamer Template
@@ -24,7 +27,8 @@ class StreamerTemplate {
 		$title = Title::newFromText($template);
 
 		if ($title->isKnown() && $title->getNamespace() == NS_TEMPLATE) {
-			$page = WikiPage::factory($title);
+			$pageFactory = MediaWikiServices::getInstance()->getWikiPageFactory();
+			$page = $pageFactory->newFromTitle($title);
 			if ($page->exists()) {
 				$content = $page->getContent();
 				return $content->getNativeData();

@@ -31,7 +31,7 @@ class SpecialStreamerInfo extends SpecialPage {
 		$this->wgUser		= $this->getUser();
 		$this->output		= $this->getOutput();
 
-		$this->DB = wfGetDB(DB_MASTER);
+		$this->DB = wfGetDB( DB_PRIMARY );
 	}
 
 	/**

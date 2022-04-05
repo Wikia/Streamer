@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * Streamer
  * Streamer Info Template
@@ -9,6 +12,13 @@
  **/
 
 class TemplateStreamerInfo {
+	/** @var \MediaWiki\Linker\LinkRenderer */
+	private $linkRenderer;
+
+	public function __construct() {
+		$this->linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+	}
+
 	/**
 	 * List of Streamer Information
 	 *
@@ -17,7 +27,11 @@ class TemplateStreamerInfo {
 	 * @return string	Built HTML
 	 */
 	public function streamerInfoPage($streamers) {
-		$HTML = Linker::link(Title::newFromText("Special:StreamerInfo/edit"), wfMessage('sip_add')->escaped()) . "
+		$link = $this->linkRenderer->makeLink(
+			Title::newFromText( "Special:StreamerInfo/edit" ),
+			wfMessage( 'sip_add' )->escaped()
+		);
+		$HTML = $link . "
 		<table class='wikitable'>
 			<thead>
 				<tr>
@@ -32,6 +46,18 @@ class TemplateStreamerInfo {
 			<tbody>";
 		if (is_array($streamers)) {
 			foreach ($streamers as $streamer) {
+				$editLink = $this->linkRenderer->makeLink(
+					Title::newFromText( "Special:StreamerInfo/edit" ),
+					wfMessage( 'sip_edit' )->escaped(),
+					[],
+					[ "streamer_id" => $streamer->getId() ]
+				);
+				$deleteLink = $this->linkRenderer->makeLink(
+					Title::newFromText( "Special:StreamerInfo/delete" ),
+					wfMessage( 'sip_delete' )->escaped(),
+					[],
+					[ "streamer_id" => $streamer->getId() ]
+				);
 				$HTML .= "
 					<tr>
 						<td>" . wfMessage("service_" . $streamer->getService())->escaped() . "</td>
@@ -39,7 +65,7 @@ class TemplateStreamerInfo {
 						<td>" . $streamer->getDisplayName() . "</td>
 						<td>" . ($streamer->getPageTitle() ? $streamer->getPageTitle()->getPrefixedText() : '') . "</td>
 						<td><a href='" . $streamer->getLink(true) . "'>" . ($streamer->getDisplayName() ? $streamer->getDisplayName() : $streamer->getRemoteName()) . "</a></td>
-						<td>(" . Linker::link(Title::newFromText("Special:StreamerInfo/edit"), wfMessage('sip_edit')->escaped(), [], ["streamer_id" => $streamer->getId()]) . " | " . Linker::link(Title::newFromText("Special:StreamerInfo/delete"), wfMessage('sip_delete')->escaped(), [], ["streamer_id" => $streamer->getId()]) . ")</td>
+						<td>(" . $editLink . " | " . $deleteLink . ")</td>
 					</tr>";
 			}
 		} else {

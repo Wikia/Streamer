@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * Streamer
  * Streamer API Base
@@ -58,6 +61,12 @@ abstract class ApiStreamerBase {
 	 */
 	protected $apiEntryPoint = null;
 
+	/** @var \MediaWiki\Http\HttpRequestFactory */
+	protected $httpFactory;
+
+	/** @var Config */
+	protected $config;
+
 	/**
 	 * Main Constructor
 	 *
@@ -65,11 +74,15 @@ abstract class ApiStreamerBase {
 	 * @return void
 	 */
 	public function __construct() {
-		global $wgServer, $wgVersion;
+		$services = MediaWikiServices::getInstance();
+		$this->config = $services->getMainConfig();
+		$server = $this->config->get( 'Server' );
+		$version = $this->config->get( 'Version' );
 
-		$this->cache = wfGetCache(CACHE_ANYTHING);
+		$this->cache = $services->getMainWANObjectCache();
+		$this->httpFactory = $services->getHttpRequestFactory();
 
-		$this->userAgent = $wgServer . " (MediaWiki/{$wgVersion}; Streamer " . STREAMER_VERSION . ")";
+		$this->userAgent = $server . " (MediaWiki/{$version}; Streamer " . STREAMER_VERSION . ")";
 	}
 
 	/**
@@ -345,7 +358,11 @@ abstract class ApiStreamerBase {
 	 * @return mixed	Parsed JSON or false on error.
 	 */
 	protected function makeApiRequest($bits) {
-		$rawJson = Http::request('GET', $this->getFullRequestUrl($bits), $this->getRequestOptions());
+		$rawJson = $this->httpFactory->request(
+			'GET',
+			$this->getFullRequestUrl( $bits ),
+			$this->getRequestOptions()
+		);
 
 		$json = $this->parseRawJson($rawJson);
 

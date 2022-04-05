@@ -1,4 +1,10 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Storage\EditResult;
+use MediaWiki\User\UserIdentity;
+
 /**
  * Streamer
  * Streamer Hooks
@@ -173,8 +179,7 @@ class StreamerHooks {
 	public static function parseStreamerInfoTag(Parser &$parser, PPFrame $frame, $arguments) {
 		self::$errors = false;
 
-		$title = $parser->getTitle();
-
+		$title = $parser->getPage();
 		$html = '';
 
 		if ($parser->getOptions()->getIsPreview()) {
@@ -212,9 +217,9 @@ class StreamerHooks {
 				$streamerInfo = StreamerInfo::newFromServiceAndName($parameters['service'], $parameters['user']);
 				$streamerInfo->load();
 
-				$streamerInfo->setDisplayName($title->getRootText());
-				if ($title !== null) {
-					$streamerInfo->setPageTitle($title);
+				if ( $title instanceof Title ) {
+					$streamerInfo->setDisplayName( $title->getRootText() );
+					$streamerInfo->setPageTitle( $title );
 				}
 
 				$streamerInfo->save();
@@ -251,7 +256,7 @@ class StreamerHooks {
 				continue;
 			}
 
-			list($parameter, $option) = explode('=', $raw);
+			[$parameter, $option] = explode('=', $raw);
 			$parameter = trim($parameter);
 			$option = trim($option);
 
@@ -319,42 +324,44 @@ class StreamerHooks {
 	/**
 	 * Catch when #streamerinfo tags are removed and delete from the database.
 	 *
-	 * @access public
-	 * @param  object	WikiPage modified
-	 * @param  object	User performing the modification
-	 * @param  object	Content object
-	 * @param  string	Edit summary/comment
-	 * @param  boolean	Whether or not the edit was marked as minor
-	 * @param  boolean                                                        $isWatch: (No longer used)
-	 * @param  object                                                         $section: (No longer used)
-	 * @param  integer	Flags passed to WikiPage::doEditContent()
-	 * @param  mixed	New Revision object of the article
-	 * @param  object	Status object about to be returned by doEditContent()
-	 * @param  integer	The revision ID (or false) this edit was based on
-	 * @return boolean True
+	 * @param WikiPage $wikiPage
+	 * @param UserIdentity $user
+	 * @param string $summary
+	 * @param int $flags
+	 * @param RevisionRecord $revisionRecord
+	 * @param EditResult $editResult
+	 * @return bool
 	 */
-	public static function onPageContentSaveComplete($article, $user, $content, $summary, $isMinor, $isWatch, $section, $flags, $revision, $status, $baseRevId) {
-		if ($revision instanceof Revision) {
-			$revisionContent = $revision->getContent(Revision::RAW);
-			$previousRevision = $revision->getPrevious();
+	public static function onPageSaveComplete(
+		WikiPage $wikiPage,
+		UserIdentity $user,
+		string $summary,
+		int $flags,
+		RevisionRecord $revisionRecord,
+		EditResult $editResult
+	) {
+		$revisionContent = $revisionRecord->getContent( $revisionRecord::RAW );
+		$revisionLookup = MediaWikiServices::getInstance()
+			->getRevisionLookup();
+		$previousRevision = $revisionLookup->getPreviousRevision( $revisionRecord );
 
-			if ($previousRevision instanceof Revision) {
-				$previousRevisionContent = $previousRevision->getContent(Revision::RAW);
-				if (strpos($previousRevisionContent->getNativeData(), "{{#streamerinfo") !== false && strpos($revisionContent->getNativeData(), "{{#streamerinfo") === false) {
-					// Time to remove from the database.
-					$DB = wfGetDB(DB_MASTER);
-					$result = $DB->select(
-						['streamer'],
-						['*'],
-						['page_title' => $revision->getTitle()],
-						__METHOD__
-					);
-					$row = $result->fetchRow();
+		if ( $previousRevision instanceof RevisionRecord ) {
+			$previousRevisionContent = $previousRevision->getContent( $revisionRecord::RAW );
+			if ( strpos( $previousRevisionContent->getNativeData(), "{{#streamerinfo" ) !== false &&
+				 strpos( $revisionContent->getNativeData(), "{{#streamerinfo" ) === false ) {
+				// Time to remove from the database.
+				$DB = wfGetDB( DB_PRIMARY );
+				$result = $DB->select(
+					[ 'streamer' ],
+					[ '*' ],
+					[ 'page_title' => $wikiPage->getTitle() ],
+					__METHOD__
+				);
+				$row = $result->fetchRow();
 
-					$streamerInfo = StreamerInfo::newFromRow($row);
-					if ($streamerInfo !== false) {
-						$streamerInfo->delete();
-					}
+				$streamerInfo = StreamerInfo::newFromRow( $row );
+				if ( $streamerInfo !== false ) {
+					$streamerInfo->delete();
 				}
 			}
 		}

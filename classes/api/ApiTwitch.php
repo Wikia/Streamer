@@ -92,10 +92,11 @@ class ApiTwitch extends ApiStreamerBase {
 	 * @return mixed	Parsed JSON or false on error.
 	 */
 	protected function makeApiRequest($bits) {
-		global $wgTwitchClientId;
-
-		$req = MWHttpRequest::factory($this->getFullRequestUrl($bits), ['timeout' => $this->getRequestOptions()['timeout']]);
-		$req->setHeader("Client-ID", $wgTwitchClientId);
+		$req = $this->httpFactory->create(
+			$this->getFullRequestUrl( $bits ),
+			[ 'timeout' => $this->getRequestOptions()['timeout'], ]
+		);
+		$req->setHeader("Client-ID", $this->config->get( 'TwitchClientId' ));
 		$req->setHeader("Accept", "application/vnd.twitchtv.v5+json");
 		$req->execute();
 

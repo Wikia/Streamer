@@ -66,7 +66,7 @@ class StreamerInfo {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->DB = wfGetDB(DB_MASTER);
+		$this->DB = wfGetDB( DB_PRIMARY );
 	}
 
 	/**
@@ -82,8 +82,7 @@ class StreamerInfo {
 
 		$serviceId = self::getServiceId($service);
 
-		$success = $streamerInfo->setService($serviceId);
-
+		$streamerInfo->setService($serviceId);
 		$success = $streamerInfo->setRemoteName($name);
 
 		if (!$success) {

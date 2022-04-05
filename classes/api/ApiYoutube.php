@@ -116,8 +116,6 @@ class ApiYoutube extends ApiStreamerBase {
 	 * @return string	Full URL
 	 */
 	protected function getFullRequestUrl($bits) {
-		global $wgYouTubeApiKey;
-
-		return parent::getFullRequestUrl($bits) . '&key=' . $wgYouTubeApiKey;
+		return parent::getFullRequestUrl($bits) . '&key=' . $this->config->get( 'YouTubeApiKey' );
 	}
 }
